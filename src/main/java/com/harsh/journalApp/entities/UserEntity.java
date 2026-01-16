@@ -19,6 +19,9 @@ public class UserEntity {
     @Id
     private ObjectId id;
 
+    public UserEntity() {
+    }
+
     @Indexed(unique = true)
     @NonNull
     private String userName;
