@@ -34,6 +34,10 @@ public class UserServices {
         userRepo.save(user);
     }
 
+    public void saveJournalToUser(UserEntity user){
+        userRepo.save(user);
+    }
+
     public void deleteUserByID(ObjectId id){
         userRepo.deleteById(id);
     }

@@ -29,21 +29,35 @@ public class JournalServices {
             JournalEntity savedJournal = journalRepo.save(journal);
             user.getJournalEntities().add(savedJournal);
 //            user.setUserName(null);
-            userServices.createNewUser(user);
+            userServices.saveJournalToUser(user);
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+
+    public void updateJournalEntity(JournalEntity journal){
+        journalRepo.save(journal);
     }
 
     public List<JournalEntity> getAllJournals(){
         return journalRepo.findAll();
     }
 
+    @Transactional
     public void deleteJournalByID(ObjectId id, String username){
-        UserEntity user = userServices.findByUserName(username);
-        user.getJournalEntities().removeIf(x -> x.getId().equals(id));
-        userServices.createNewUser(user);
-        journalRepo.deleteById(id);
+        try{
+            UserEntity user = userServices.findByUserName(username);
+            Boolean removed = user.getJournalEntities().removeIf(x -> x.getId().equals(id));
+            if(removed){
+                userServices.saveJournalToUser(user);
+                journalRepo.deleteById(id);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+            throw new RuntimeException("An error occured while deleting the entry" + e);
+        }
+
+
     }
 
     public Optional<JournalEntity> getJournalByID(ObjectId id){
