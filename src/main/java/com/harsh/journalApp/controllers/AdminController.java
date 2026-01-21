@@ -1,5 +1,6 @@
 package com.harsh.journalApp.controllers;
 
+import com.harsh.journalApp.cache.AppCache;
 import com.harsh.journalApp.entities.UserEntity;
 import com.harsh.journalApp.services.UserServices;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ public class AdminController {
     @Autowired
     private UserServices userServices;
 
+    @Autowired
+    private AppCache appCache;
+
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/users")
@@ -30,5 +34,10 @@ public class AdminController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/clear-app-cache")
+    public void clearCache(){
+        appCache.init();
     }
 }
